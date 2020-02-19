@@ -1,3 +1,10 @@
+# -*- coding: utf-8 -*-
+'''
+Created on Mon Feb 17 12:00:00 2020
+
+@author: Yann Pejon
+'''
+
 import numpy as np
 import matplotlib.pyplot as plt
 from math import pi 
