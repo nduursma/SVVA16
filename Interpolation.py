@@ -1,9 +1,20 @@
+import numpy as np
+import matplotlib.pyplot as plt
+from math import pi 
+from mpl_toolkits.mplot3d import Axes3D
+
+data = np.loadtxt('AERO.dat',delimiter = ',')
+
 def patchinterpolate(x_mesh, z_mesh, data):
     
     #GETTING X AND Z VALUES OF DATA
     
     xlst = []
     zlst = []
+    Nz = len(data)
+    Nx = len(data[0])
+    ca = 0.505
+    la = 1.611
     
     for i in range(1,Nz+1):  
         thetazi  = (i-1)/Nz*pi
@@ -17,7 +28,7 @@ def patchinterpolate(x_mesh, z_mesh, data):
         x  = (1/2)*((la/2)*(1-np.cos(thetaxk))+(la/2)*(1-np.cos(thetaxk1)))   
         xlst.append(x)
       
-        #INTERPOLATION
+    #INTERPOLATION
 
     #GENERATING LIST OF ALL PATCHES
     squarelst =[]
@@ -31,6 +42,7 @@ def patchinterpolate(x_mesh, z_mesh, data):
     
     
     #GENERATING A MATRIX   
+    
     Alst = []
     
     for j in range(len(data)-1):
@@ -94,4 +106,4 @@ def patchinterpolate(x_mesh, z_mesh, data):
             if len(pxz_row) != 0:        
                 pxz_lst.append(pxz_row)
                 
-    return pxz_lst
+    return x_lst, z_lst, pxz_lst
