@@ -1,95 +1,97 @@
-"""
-Interpolation of Aerodynamic load
+def patchinterpolate(x_mesh, z_mesh, data):
+    
+    #GETTING X AND Z VALUES OF DATA
+    
+    xlst = []
+    zlst = []
+    
+    for i in range(1,Nz+1):  
+        thetazi  = (i-1)/Nz*pi
+        thetazi1 = (i)/Nz*pi
+        z  =  -(1/2)*((ca/2)*(1-np.cos(thetazi))+(ca/2)*(1-np.cos(thetazi1)))    
+        zlst.append(z)
+    
+    for k in range(1,Nx+1):
+        thetaxk  = (k-1)/Nx*pi
+        thetaxk1 = (k)/Nx*pi
+        x  = (1/2)*((la/2)*(1-np.cos(thetaxk))+(la/2)*(1-np.cos(thetaxk1)))   
+        xlst.append(x)
+      
+        #INTERPOLATION
 
-Created by B. van Dillen
-"""
-
-#Imports
-import numpy as np
-
-
-# Necessary inputs
-ca = 0.505 #m
-la = 1.611 #m
-
-
-# Reading the aerodynamic load
-load = np.loadtxt('AERO.dat',delimiter = ',')
-
-
-# Calculate locations of x and z coordinates
-Nz = len(load)
-Nx = len(load[0])
-
-zlst = []
-xlst = []
-
-# Calculate the z coordinates
-for i in range(1, Nz + 1):
-    thetazi = (i - 1) / Nz * np.pi
-    thetazi1 = (i) / Nz * np.pi
-    zi = -(1 / 2) * ((ca / 2) * (1 - np.cos(thetazi)) + (ca / 2) * (1 - np.cos(thetazi1)))
-    zlst.append(zi)
-
-# Calculate the x coordinates
-for i in range(1, Nx + 1):
-    thetaxi = (i - 1) / Nx * np.pi
-    thetaxi1 = (i) / Nx * np.pi
-    xi = (1 / 2) * ((la / 2) * (1 - np.cos(thetaxi)) + (la / 2) * (1 - np.cos(thetaxi1)))
-    xlst.append(xi)
-
-
-# Creating the 2D mesh
-X, Z = np.meshgrid(xlst, zlst)
-
-# Create lists to save the coordinates and A matrices
-rectangle_lst = []
-A_lst = []
-f_lst = []
-
-# For loop going through every row
-for i in range(Nz-1):
-    rectangle_row = []
-    A_row = []
-    f_row = []
-    # For loop going through every column
-    for j in range(Nx-1):
-        # Determine x1, x2, z1, z2
-        x1 = X[i][j]
-        x2 = X[i][j+1]
-        z1 = Z[i][j]
-        z2 = Z[i+1][j]
-
-        # Determine the load
-        f11 = load[i][j]
-        f21 = load[i][j+1]
-        f12 = load[i+1][j]
-        f22 = load[i+1][j+1]
-        # Determine the f array
-        f = [f11,f21,f12,f22]
-        # Appand to the row list
-        f_row.append(f)
-
-        # Determine points of the rectangle
-        points_matrix = [[x1,z1],
-                         [x2,z2]]
-        # Append to the row list
-        rectangle_row.append(points_matrix)
-
-        # Determine A matrix
-        A = [[1,x1,z1,x1*z1],
-             [1,x2,z1,x2*z1],
-             [1,x1,z2,x1*z2],
-             [1,x2,z2,x2*z2]]
-        # Append to the row list
-        A_row.append(A)
-
-    # Append the rows to the lists
-    rectangle_lst.append(rectangle_row)
-    A_lst.append(A_row)
-    f_lst.append(f_row)
-
-# Transform into a numpy array
-rectangle_lst = np.array(rectangle_lst)
-A_lst = np.array(A_lst)
-f_lst = np.array(f_lst)
+    #GENERATING LIST OF ALL PATCHES
+    squarelst =[]
+    
+    for j in range(len(data)-1):
+        rowlst = []
+        for i in range(len(data[0])-1):
+            mat = np.array([[xlst[i],zlst[j]], [xlst[i+1],zlst[j+1]]])
+            rowlst.append(mat)
+        squarelst.append(rowlst)
+    
+    
+    #GENERATING A MATRIX   
+    Alst = []
+    
+    for j in range(len(data)-1):
+        Arowlst = []
+        for i in range(len(data[0])-1):
+            x0 = squarelst[j][i][0][0]
+            z0 = squarelst[j][i][0][1]
+            x1 = squarelst[j][i][1][0]
+            z1 = squarelst[j][i][1][1]
+            mat = np.array([[1, x0, z0, x0*z0],
+                            [1, x1, z0, x1*z0],
+                            [1, x0, z1, x0*z1],
+                            [1, x1, z1, x1*z1]])
+            Arowlst.append(mat)
+        Alst.append(Arowlst)
+    
+    #GENERATING LIST OF ALL FUNCTION VALUES
+    f_lst = []
+    for j in range(len(data)-1):
+        f_row = []
+        for i in range(len(data[0])-1):
+            f_11 = data[j][i]
+            f_21 = data[j][i+1]
+            f_12 = data[j+1][i]
+            f_22 = data[j+1][i+1]
+            vec = np.array([[f_11],[f_21],[f_12],[f_22]])
+            f_row.append(vec)
+        f_lst.append(f_row)
+    
+    #GENERATING LIST OF a:
+    a_lst = []
+    for j in range(len(data)-1):
+        a_row = []
+        for i in range(len(data[0])-1):
+            a_vec = np.linalg.solve(Alst[j][i], f_lst[j][i])
+            a_row.append(a_vec)
+        a_lst.append(a_row)
+    
+    #GENERATING POINTS TO BE INTERPOLATED
+    x_lst = np.linspace(xlst[0],xlst[-1],x_mesh)
+    z_lst = np.linspace(zlst[0], zlst[-1],z_mesh)
+    
+    #GENERATING INTERPOLATED VALUES
+    
+    pxz_lst = []
+               
+    for j in range(len(zlst)-1):
+        for k in range(len(z_lst)):
+            pxz_row = []
+            for i in range(len(xlst)-1):
+                x1 = xlst[i]
+                x2 = xlst[i+1]
+                z1 = zlst[j]
+                z2 = zlst[j+1]
+                for l in range(len(x_lst)):
+                    x_coordinate = x_lst[l]
+                    z_coordinate = z_lst[k]
+                    if x1 <= x_coordinate <= x2 and z2 <= z_coordinate <= z1:
+                        pxz = a_lst[j][i][0] + a_lst[j][i][1]*x_coordinate + a_lst[j][i][2]*z_coordinate + a_lst[j][i][3]*x_coordinate*z_coordinate
+                        pxz_row.append(float(pxz))
+            if len(pxz_row) != 0:        
+                pxz_lst.append(pxz_row)
+                
+    return pxz_lst
