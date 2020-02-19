@@ -12,14 +12,14 @@ from Interpolation import patchinterpolate
 
 #Read data of distributed load magnitude
 data = np.loadtxt('AERO.dat',delimiter = ',')  #Creating an Array from the aerodynamic load data file
-xlst, zlst, y = patchinterpolate(100,100,data)
-qlst = y
 
 
 
-
-
-def integrate(xlst,zlst,qlst):
+def integrate(x_mesh,z_mesh,data):
+    
+    xlst, zlst, y = patchinterpolate(100,100,data)
+    qlst = y
+    
     #Calculate locations of X and Z coordinates
     Nz = len(qlst)
     Nx = len(qlst[0])
