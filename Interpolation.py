@@ -89,21 +89,38 @@ def patchinterpolate(x_mesh, z_mesh, data):
     
     pxz_lst = []
                
+    
     for j in range(len(zlst)-1):
+        z1 = zlst[j]
+
+        z2 = zlst[j+1]
+
         for k in range(len(z_lst)):
+
             pxz_row = []
+            
+            z_coordinate = z_lst[k]
+
             for i in range(len(xlst)-1):
+
                 x1 = xlst[i]
+
                 x2 = xlst[i+1]
-                z1 = zlst[j]
-                z2 = zlst[j+1]
+
+                
+
                 for l in range(len(x_lst)):
+
                     x_coordinate = x_lst[l]
-                    z_coordinate = z_lst[k]
+
                     if x1 <= x_coordinate <= x2 and z2 <= z_coordinate <= z1:
+
                         pxz = a_lst[j][i][0] + a_lst[j][i][1]*x_coordinate + a_lst[j][i][2]*z_coordinate + a_lst[j][i][3]*x_coordinate*z_coordinate
+
                         pxz_row.append(float(pxz))
+
             if len(pxz_row) != 0:        
+
                 pxz_lst.append(pxz_row)
                 
     return x_lst, z_lst, pxz_lst
