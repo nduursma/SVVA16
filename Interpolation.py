@@ -123,4 +123,4 @@ def patchinterpolate(x_mesh, z_mesh, data):
 
                 pxz_lst.append(pxz_row)
                 
-    return x_lst, z_lst, pxz_lst
+    return x_lst, z_lst, np.array(pxz_lst)

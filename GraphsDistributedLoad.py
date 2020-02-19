@@ -9,10 +9,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from math import pi 
 from mpl_toolkits.mplot3d import Axes3D
+from Interpolation import patchinterpolate
 
 #Create coordinate lists in x and z direction
-xlst = []
-zlst = []
+#xlst = []
+#zlst = []
 
 
 ca = 0.505 #m
@@ -22,30 +23,29 @@ la = 1.611 #m
 data = np.loadtxt('AERO.dat',delimiter = ',')  #Creating an Array from the aerodynamic load data file
 
 #Calculate locations of X and Z coordinates
-Nz = len(data)
-Nx = len(data[0])
-
-print(Nz)
-for i in range(1,Nz+1):
-    
-    #print(i)
-    
-    thetazi  = (i-1)/Nz*pi
-    thetazi1 = (i)/Nz*pi
-    z  =  -(1/2)*((ca/2)*(1-np.cos(thetazi))+(ca/2)*(1-np.cos(thetazi1)))    
-    zlst.append(z)
-    
-for k in range(1,Nx+1):
-    thetaxk  = (k-1)/Nx*pi
-    thetaxk1 = (k)/Nx*pi
-    x  = (1/2)*((la/2)*(1-np.cos(thetaxk))+(la/2)*(1-np.cos(thetaxk1)))   
-    xlst.append(x)
+#Nz = len(data)
+#Nx = len(data[0])
+#
+#for i in range(1,Nz+1):
+#    
+#    #print(i)
+#    
+#    thetazi  = (i-1)/Nz*pi
+#    thetazi1 = (i)/Nz*pi
+#    z  =  -(1/2)*((ca/2)*(1-np.cos(thetazi))+(ca/2)*(1-np.cos(thetazi1)))    
+#    zlst.append(z)
+#    
+#for k in range(1,Nx+1):
+#    thetaxk  = (k-1)/Nx*pi
+#    thetaxk1 = (k)/Nx*pi
+#    x  = (1/2)*((la/2)*(1-np.cos(thetaxk))+(la/2)*(1-np.cos(thetaxk1)))   
+#    xlst.append(x)
       
 def CreatePlots(xlst,zlst,qlst):  
             
     #Create 2D Contour plot
     X, Z = np.meshgrid(xlst, zlst)
-    Y = data
+    Y = qlst
     
     plt.figure()
     cp = plt.contourf(X, Z, Y )
@@ -71,5 +71,5 @@ def CreatePlots(xlst,zlst,qlst):
     ax.view_init(azim=166)
     plt.show()
         
-CreatePlots(xlst,zlst,data)   
-    
+
+
