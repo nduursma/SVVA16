@@ -1,0 +1,89 @@
+@author: Kadhum
+"""
+import numpy as np
+import matplotlib.pyplot as plt
+from math import *
+
+
+h = 0.161
+Ca = 0.505
+theta = np.arange(0,np.pi,0.03)
+S = 1
+t = 1.1*10**-3
+t2 = 2.4*10**-3
+Izz = 20
+
+
+tstif = 0.0012
+hstif = 0.013
+wstif = 0.017 
+
+r = h/2
+d = sqrt(r**2+(Ca-r)**2)
+B = tstif*hstif+ tstif*wstif
+
+halflength = 1/2*pi*r+sqrt(r**2+(Ca-r)**2)
+ 
+
+#Distance stiffeners
+Sdist = halflength/6
+
+
+psi = Sdist/(1/2*pi*r) * 1/2*pi
+#print(psi*180/pi)
+
+
+def ShearInteg(x,y):
+    
+    znew = 0
+    z = [0]
+    for i in range(len(x)-1):
+        dz = (x[i+1] + x[i]) *0.5
+        znew = znew + dz*(y[-1])/(len(x)-1) 
+        z.append(znew)
+    
+    return np.asarray(z)
+
+step = 0.001
+
+theta = np.arange(0,pi,step)
+
+q1b = t/Izz * r *  ShearInteg(np.cos(theta)*r,theta) 
+F1 = ShearInteg(q1b*r,theta)[-1]
+
+
+
+s2 = np.arange(0,h,step)
+q2b = -t2/Izz * ShearInteg(-r + s2, s2) + q1b[-1]
+F2 = ShearInteg(q2b, s2)[-1]
+
+s3 = np.arange(0,d,step)
+q3b = -t/Izz * r/d *ShearInteg(s3, s3)
+F3 = ShearInteg(q3b, s3)
+
+s5 = np.arange(0,h,step)
+q5b = t2/Izz * ShearInteg(r-s3,s3) + q3b[-1]
+F5 = ShearInteg(q5b,s3)
+
+
+A = np.matrix([[pi*r/t+h/t2,-h/t2],
+             [-h/t2,2*d/t+h/t2]])
+
+B = np.matrix([[-F1/t-(F2-F5)/t2],
+             [-2*F3/t-(F5-F2)/t2]])
+
+Q = np.linalg.inv(A)*B
+
+q01, q02 = Q
+
+
+#moments around midspar to find Shear center
+
+A1 = 1/2*pi*r**2
+A2 = 1/2 * (Ca-r)*h
+beta = np.arctan(r/(Ca-r))
+L = np.cos(beta)*r
+
+
+Mtot = F1*r + 2*F3*L+ 2*A1*q01+ 2*A2*q02
+eta = -Mtot 
