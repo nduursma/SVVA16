@@ -12,8 +12,10 @@ from Interpolation import patchinterpolate
 
 #Read data of distributed load magnitude
 data = np.loadtxt('AERO.dat',delimiter = ',')  #Creating an Array from the aerodynamic load data file
-xlst, zlst, qlst = patchinterpolate(50,50,data)
+xlst, zlst, qlst = patchinterpolate(200,200,data)
 
+
+#Outputs a list with the total magnitude of the resulant force, the magnitude per slice in x direction, and its belonging centroid.
 def Magnitude_Centroid(xlst,zlst,qlst):
     #Calculate locations of X and Z coordinates
     Nz = len(qlst)
@@ -83,7 +85,7 @@ def Magnitude_Centroid(xlst,zlst,qlst):
     return Vtot, Maglst, Centroid_Zlst     
 
 
-#Find the Torque around the x axis for an xlocation 
+#Find the Torque around the x axis for a specific x location 
 def Torque_x(xlst, Maglst, Centroid_Zlst, xloc):
     T = 0 
     dx = 1/(len(xlst)-1)*xlst[-1]
@@ -94,6 +96,7 @@ def Torque_x(xlst, Maglst, Centroid_Zlst, xloc):
         T= T+Maglst[m]*Centroid_Zlst[m]
     return T
 
+#Outputs an array with torque caused by distributed load up till cut in x direction
 def Torque_xarray(Maglst, Centroid_Zlst):
     Tlst = []
     T = 0
@@ -102,6 +105,7 @@ def Torque_xarray(Maglst, Centroid_Zlst):
         Tlst.append(T)
     return Tlst
 
+#Find the moment around the z axis for a specific x location
 def Moment_z(xlst, Maglst, xloc):
     dx = 1/(len(xlst)-1)*xlst[-1]
     n = 0 
@@ -112,6 +116,7 @@ def Moment_z(xlst, Maglst, xloc):
         Mz = Mz + dx*r*Maglst[r]
     return Mz
 
+#Outputs an array with the moment around the z axis caused by the distributed load up till cut in x direction.
 def Moment_zarray(Maglst):
     dx = 1/(len(xlst)-1)*xlst[-1]
     Mz = 0
