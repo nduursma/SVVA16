@@ -12,17 +12,17 @@ from Interpolation import patchinterpolate
 
 #Read data of distributed load magnitude
 data = np.loadtxt('AERO.dat',delimiter = ',')  #Creating an Array from the aerodynamic load data file
-xlst, zlst, qlst = patchinterpolate(200,200,data)
+#xlst, zlst, qlst = patchinterpolate(200,200,data)
 
 
 #Outputs a list with the total magnitude of the resulant force, the magnitude per slice in x direction, and its belonging centroid.
-def Magnitude_Centroid(xlst,zlst,qlst):
+def Magnitude_Centroid(x_mesh,z_mesh,data):
     #Calculate locations of X and Z coordinates
+    xlst, zlst, qlst = patchinterpolate(x_mesh,z_mesh,data)
     Nz = len(qlst)
     Nx = len(qlst[0])
-    
     #Create list with distributed load for every slice in x direction [N], and its centroid in Z direction
-    Centroid_Zlst = [] 
+    Centroid_Zlst = []
     Maglst = []
     
     
