@@ -8,6 +8,10 @@ from math import pi
 import numpy as np
 from Interpolation import patchinterpolate
 
+#z coordinate of the hinge line
+c_a = 0.505
+h_a = 0.161
+hl_z = -c_a + h_a/2
 
 
 #Read data of distributed load magnitude
@@ -93,7 +97,7 @@ def Torque_x(xlst, Maglst, Centroid_Zlst, xloc):
     while dx*n <= xloc:
         n = n+1        
     for m in range(n):
-        T= T+Maglst[m]*Centroid_Zlst[m]
+        T= T+Maglst[m]*(hl_z - Centroid_Zlst[m])
     return T
 
 #Outputs an array with torque caused by distributed load up till cut in x direction
@@ -101,7 +105,7 @@ def Torque_xarray(Maglst, Centroid_Zlst):
     Tlst = []
     T = 0
     for m in range(len(Maglst)):
-        T= T + Maglst[m]*Centroid_Zlst[m]
+        T= T + Maglst[m]*(hl_z - Centroid_Zlst[m])
         Tlst.append(T)
     return Tlst
 
