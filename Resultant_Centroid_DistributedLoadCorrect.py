@@ -8,25 +8,21 @@ from math import pi
 import numpy as np
 from Interpolation import patchinterpolate
 
+
+
 #z coordinate of the hinge line
 c_a = 0.505
 h_a = 0.161
 hl_z = -c_a + h_a/2
 
-
-#Read data of distributed load magnitude
-data = np.loadtxt('AERO.dat',delimiter = ',')  #Creating an Array from the aerodynamic load data file
-#xlst, zlst, qlst = patchinterpolate(200,200,data)
-
-
 #Outputs a list with the total magnitude of the resulant force, the magnitude per slice in x direction, and its belonging centroid.
-def Magnitude_Centroid(x_mesh,z_mesh,data):
+def Magnitude_Centroid(xlst,zlst,qlst):
     #Calculate locations of X and Z coordinates
-    xlst, zlst, qlst = patchinterpolate(x_mesh,z_mesh,data)
     Nz = len(qlst)
     Nx = len(qlst[0])
+    
     #Create list with distributed load for every slice in x direction [N], and its centroid in Z direction
-    Centroid_Zlst = []
+    Centroid_Zlst = [] 
     Maglst = []
     
     
@@ -121,7 +117,7 @@ def Moment_z(xlst, Maglst, xloc):
     return Mz
 
 #Outputs an array with the moment around the z axis caused by the distributed load up till cut in x direction.
-def Moment_zarray(Maglst):
+def Moment_zarray(Maglst, xlst):
     dx = 1/(len(xlst)-1)*xlst[-1]
     Mz = 0
     Mzlst = []
@@ -130,6 +126,9 @@ def Moment_zarray(Maglst):
         Mzlst.append(Mz)
     return Mzlst
 
+#Read data of distributed load magnitude
+data = np.loadtxt('AERO.dat',delimiter = ',')  #Creating an Array from the aerodynamic load data file
+xlst, zlst, qlst = patchinterpolate(100,100,data)
 
 
 Vtot, Maglst, Centroid_Zlst = Magnitude_Centroid(xlst,zlst,qlst)
