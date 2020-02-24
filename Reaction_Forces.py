@@ -233,5 +233,3 @@ c = np.array([[-My(la)[1]],
 
 # Solving for the unknowns in vector b
 #b = np.linalg.solve(A,c)
-
-#print(b)
