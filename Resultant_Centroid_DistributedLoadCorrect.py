@@ -117,7 +117,7 @@ def Moment_z(xlst, Maglst, xloc):
     return Mz
 
 #Outputs an array with the moment around the z axis caused by the distributed load up till cut in x direction.
-def Moment_zarray(Maglst):
+def Moment_zarray(Maglst, xlst):
     dx = 1/(len(xlst)-1)*xlst[-1]
     Mz = 0
     Mzlst = []
