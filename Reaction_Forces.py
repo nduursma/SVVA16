@@ -20,10 +20,10 @@ d3    = 1.245       # [m]
 theta = 30          # [deg]
 E     = 20          # [GPa]
 G     = 20          # [GPa]
-Iyy   = 20          # [m4]
-Izz   = 20          # [m4]
+Iyy   = 4.59        # [m4]
+Izz   = 4.75        # [m4]
 J     = 20          # [m4]
-zsc   = -0.2        # [m]
+zsc   = -0.226      # [m]
 P     = 49.2        # [kN]
 qtot, Maglst, Centroid_Zlst  = Magnitude_Centroid()
 
@@ -102,7 +102,7 @@ def My(x):
         row[Cz] = -1*(x-x3)
 
     if x-xp>=0:
-        additional_sum = Pz*(x-xp)
+        additional_sum += Pz*(x-xp)
 
     return row,additional_sum
 
@@ -119,13 +119,23 @@ def Mz(x):
     if x-x3>=0:
         row[Cy] = -1*(x-x3)
     if x-xp>=0:
-        additional_sum = Pz*(x-xp)
+        additional_sum += Pz*(x-xp)
     return row,additional_sum
 
 # Torque
 def T(x):
-    row = np.array([1/GJ*(0-zsc),0.,1/GJ*(0-zsc),0.,1/GJ*(0-zsc),0.,1/GJ*(0-zsc),0.,0.,0.,0.,0.,0.])
-    additional_sum = Py/GJ*(0-zsc)+Torque_zsc(x,zsc)
+    row = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.])
+    additional_sum = Torque_zsc(x,zsc)
+    if x-x1>=0:
+        row[Ay] = -zsc
+    if x-xf>=0:
+        row[Fy] = -zsc
+    if x-x2>=0:
+        row[By] = -zsc
+    if x-x3>=0:
+        row[Cy] = -zsc
+    if x-xp>=0:
+        additional_sum += -Py*(-zsc)
     return row, additional_sum
 
 # Displacement in y direction
@@ -141,7 +151,7 @@ def v(x):
     if x-x3>=0:
         row[Cy] = 1/(6*EIzz)*(x-x3)**3
     if x-xp>=0:
-        additional_sum = -Py/(6*EIzz)*(x-xp)**3
+        additional_sum += -Py/(6*EIzz)*(x-xp)**3
     return row,additional_sum
 
 # Displacement in z direction
@@ -157,7 +167,7 @@ def w(x):
     if x-x3>=0:
         row[Cz] = 1/(6*EIzz)*(x-x3)**3
     if x-xp>=0:
-        additional_sum = -Py/(6*EIzz)*(x-xp)**3
+        additional_sum += -Py/(6*EIzz)*(x-xp)**3
     return row,additional_sum
 
 # Twist
@@ -165,15 +175,15 @@ def ftheta(x):
     row = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.])
     additional_sum = 0
     if x-x1>=0:
-        row[Ay] = 1/GJ*(0-zsc)*(x-x1)
+        row[Ay] = 1/GJ*(-zsc)*(x-x1)
     if x-xf>=0:
-        row[Fy] = 1/GJ*(0-zsc)*(x-xf)
+        row[Fy] = 1/GJ*(-zsc)*(x-xf)
     if x-x2>=0:
-        row[By] = 1/GJ*(0-zsc)*(x-x2)
+        row[By] = 1/GJ*(-zsc)*(x-x2)
     if x-x3>=0:
-        row[Cy] = 1/GJ*(0-zsc)*(x-x3)
+        row[Cy] = 1/GJ*(-zsc)*(x-x3)
     if x-xp>=0:
-        additional_sum = -Py/GJ*(0-zsc)*(x-xp)
+        additional_sum += -Py/GJ*(-zsc)*(x-xp)
     return row,additional_sum
 
 # Sum of forces in z direction
@@ -185,9 +195,11 @@ def Sz():
 # Sum of forces in y direction
 def Sy():
     row = np.array([-1.,0.,-1.,0.,-1.,0.,-1.,0.,0.,0.,0.,0.,0.])
-    additional_sum = Py + qtot
+    additional_sum = Py + (-qtot)
     return row,additional_sum
 
+
+# Solving for the unknowns
 
 # Creating the A matrix with output rows from the functions
 A = np.array([My(la)[0],
