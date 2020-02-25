@@ -14,9 +14,9 @@ from Interpolation import patchinterpolate
 sc = -0.085
 
 data = np.loadtxt('AERO.dat',delimiter = ',')
-xlst, zlst, qlst = patchinterpolate(100,100,data)
+#xlst, zlst, qlst = patchinterpolate(600,600,data)
 
-def output(sc):
+def output(xlst, zlst, qlst, sc):
     
     Nz = len(qlst)
     Nx = len(qlst[0])
@@ -84,10 +84,10 @@ def output(sc):
 
     return Vlst, Mlst, defllst, Tlst, thetalst
 
-Vlst, Mlst, defllst, Tlst, thetalst = output(sc)
+#Vlst, Mlst, defllst, Tlst, thetalst = output(sc)
 #print(' V', Vlst[-1], '\n M_z', Mlst[-1], '\n Deflection', defllst[-1],'/EI \n Torque', Tlst[-1], '\n Theta', thetalst[-1],'/GJ')
 
-def locationvalue(xloc, reflst):
+def locationvalue(xlst, xloc, reflst):
     dx = 1/(len(xlst)-1)*xlst[-1]
     n = 0 
     while dx*n <= xloc:
