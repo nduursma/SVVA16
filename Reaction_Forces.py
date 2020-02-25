@@ -237,3 +237,19 @@ def reaction_forces():
     b = np.linalg.solve(A,c)
 
     return b
+
+
+
+b = reaction_forces()
+print('Ay=', b[0][0], 
+          '\n Az=', b[1][0],
+          '\n By=', b[2][0],
+          '\n Bz=', b[3][0],
+          '\n Cy=', b[4][0],
+          '\n Cz=', b[5][0],
+          '\n Fy=', b[6][0],
+          '\n C1=', b[7][0],
+          '\n C2=', b[8][0],
+          '\n C3=', b[9][0],
+          '\n C4=', b[10][0],
+          '\n C5=', b[11][0])
