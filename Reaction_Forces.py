@@ -6,7 +6,7 @@ import numpy as np
 from NEW_Forces_Deflections import locationvalue
 
 
-def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,Vlst,Mlst,defllst,Tlst,thetalst):
+def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,defllst,Tlst,thetalst):
 
     # Transformation of some input parameters
 
@@ -89,7 +89,7 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,Vlst,Mlst,d
     # Moment around the z axis
     def Mz(x):
         row = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.])
-        additional_sum = (-locationvalue(x,Mlst)) # Mlst is negative, needs to be +
+        additional_sum = (-locationvalue(xlst,x,Mlst)) # Mlst is negative, needs to be +
         if x-x1>=0:
             row[iAy] = -1*(x-x1)
         if x-xf>=0:
@@ -105,7 +105,7 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,Vlst,Mlst,d
     # Torque
     def T(x):
         row = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.])
-        additional_sum = locationvalue(x,Tlst)
+        additional_sum = locationvalue(xlst,x,Tlst)
         if x-x1>=0:
             row[iAy] = -zsc
         if x-xf>=0:
@@ -122,7 +122,7 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,Vlst,Mlst,d
     # Displacement in y direction
     def v(x):
         row = np.array([0.,0.,0.,0.,0.,0.,0.,0.,x,1.,0.,0.,0.])
-        additional_sum = locationvalue(x,defllst)/EIzz
+        additional_sum = locationvalue(xlst,x,defllst)/EIzz
         if x-x1>=0:
             row[iAy] = 1/(6*EIzz)*(x-x1)**3
         if x-xf>=0:
@@ -154,7 +154,7 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,Vlst,Mlst,d
     # Twist
     def ftheta(x):
         row = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.])
-        additional_sum = locationvalue(x,thetalst)/GJ
+        additional_sum = locationvalue(xlst,x,thetalst)/GJ
         if x-x1>=0:
             row[iAy] = 1/GJ*(-zsc)*(x-x1)
         if x-xf>=0:
@@ -232,7 +232,11 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,Vlst,Mlst,d
 
     return Ay,Az,By,Bz,Cy,Cz,Fy,Fz,C1,C2,C3,C4,C5
 
+
 '''
+from Interpolation import patchinterpolate
+from NEW_Forces_Deflections import output
+
 ca    = 0.505       # [m]
 la    = 1.611       # [m]
 h     = 16.1E-2     # [m]
@@ -250,7 +254,10 @@ Izz   = 4.75E-6     # [m4]
 J     = 7.749E-6    # [m4]
 zsc   = -0.085      # [m]
 P     = 49.2E3      # [N]
-Vlst,Mlst,defllst,Tlst,thetalst = output(zsc)
 
-Ay,Az,By,Bz,Cy,Cz,Fy,Fz,C1,C2,C3,C4,C5 = reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,Vlst,Mlst,defllst,Tlst,thetalst)
+data = np.loadtxt('AERO.dat',delimiter = ',')
+xlst, zlst, qlst = patchinterpolate(600,600,data)
+Vlst,Mlst,defllst,Tlst,thetalst = output(xlst,zlst,qlst,zsc)
+
+Ay,Az,By,Bz,Cy,Cz,Fy,Fz,C1,C2,C3,C4,C5 = reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,defllst,Tlst,thetalst)
 '''
