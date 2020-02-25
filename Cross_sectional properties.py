@@ -4,13 +4,6 @@ Created on Wed Feb 19 11:57:00 2020
 
 @author: Dimitris
 """
-
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Feb 17 14:16:02 2020
-
-@author: Dimitris
-"""
 from math import * 
 import numpy as np  
 from matplotlib import pyplot as plt
@@ -51,14 +44,16 @@ def cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst) :
     sk  = np.sqrt(r**2 + (Ca-r)**2)      #Length of straight part of the airfoil in m 
     phi = atan((r)/(Ca-r))                 #Angle of the non circular part of the airfoil 
     
-    #At = (pi*r**2)/2+ r*(Ca-r)
-    #print(At)
+    At = (pi*r**2)/2+ r*(Ca-r)
+    print(At)
     
     
     A_sk   = sk*tsk                          #Area of the skin straight panel in m2
     A_cir  = pi*r*tsk                       #Area of the skin circular panel in m2
     A_sp   = (h)*tsp                             #Area of the spar in m2
     Ast    =  (wst*tst + (hst-tst)*tst)                 #Area of a stiffener m2
+    
+    print(2*A_sk+A_cir+A_sp+nst*Ast)
     
     ycirc = 0 
     zcirc = -(r-2*(r-tsk)/(pi))  
@@ -143,6 +138,8 @@ def cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst) :
     
     #print(stiff[:,5])
     
+    print(stiff[:,1])
+    
     z   = (stiff[:,1] -zbar)**2
     y   = (stiff[:,2] -ybar)**2 
     
@@ -200,8 +197,22 @@ def cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst) :
     plt.plot(zbar,ybar,'o')
     plt.axis('equal')
     plt.show()
+    
+    ybarv = 0.0
+    zbarv = -0.20362591085157106
+    Iyyv =  4.5943507864451845e-05
+    Izzv =  4.753851442684436e-06
+    
+    print(Iyyv)
+    print(Izzv)
+    print("Iyy %",(Iyy-Iyyv)*100/Iyy)
+    print("Izz %",(Izz-Izzv)*100/Izz)
+    print("Z %",(zbarv-zbar)*100/zbar)
 
     return(zbar,ybar,Izz,Iyy)
     
     #print(stiff)
-cross_sect_prop(16.1,1.1,2.4,1.2,1.3,1.7,0.505,11)
+zbar,ybar,Izz,Iyy = cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst)
+
+print(Iyy)
+print(Izz)
