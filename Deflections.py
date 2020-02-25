@@ -155,7 +155,7 @@ def w(x):
 
     defl = row.dot(rf) + additional_sum
 
-    return defl
+    return defl[0]
 
 # Twist
 def ftheta(x):
@@ -175,4 +175,6 @@ def ftheta(x):
 
     twist = row.dot(rf) + additional_sum
 
-    return twist
+    return twist[0]
+
+
