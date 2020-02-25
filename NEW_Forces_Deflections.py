@@ -26,6 +26,7 @@ def output(xlst, zlst, qlst, sc):
     qavglst = [] 
     taulst = []
     
+    qtot = 0
     
     for xj in range(0,Nx): 
         Az = 0
@@ -36,6 +37,11 @@ def output(xlst, zlst, qlst, sc):
             
             taui = (qlst[zj][xj]*(zlst[zj] - sc) + qlst[zj-1][xj]*(zlst[zj-1] - sc))/2*dz
             tau = tau + taui
+            
+            
+            qi = (qlst[zj][xj] + qlst[zj][xj-1]+qlst[zj-1][xj] + qlst[zj-1][xj-1])/4*dz*dx
+            qtot = qi + qtot
+            
             
         qavglst.append(Az)
         taulst.append(tau)
