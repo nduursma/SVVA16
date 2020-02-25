@@ -79,7 +79,7 @@ def output(xlst, zlst, qlst, sc):
 
     Vlst = np.array(Vlst)*1000        # [N]
     Mlst = np.array(Mlst)*1000        # [Nm]
-    defllst = np.array(defllst)/1000  # [m]
+    defllst = np.array(defllst)*1000  # [m]
     Tlst = np.array(Tlst)*1000        # [Nm]
 
     return Vlst, Mlst, defllst, Tlst, thetalst
