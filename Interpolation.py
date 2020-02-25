@@ -36,14 +36,15 @@ def patchinterpolate(x_mesh, z_mesh, data):
     #INTERPOLATION
 
     #GENERATING LIST OF ALL PATCHES
-    squarelst =[]
+    patchlst =[]
     
     for j in range(len(data)-1):
         rowlst = []
         for i in range(len(data[0])-1):
-            mat = np.array([[xlst[i],zlst[j]], [xlst[i+1],zlst[j+1]]])
+            mat = np.array([[xlst[i],zlst[j]], 
+                            [xlst[i+1],zlst[j+1]]])
             rowlst.append(mat)
-        squarelst.append(rowlst)
+        patchlst.append(rowlst)
     
     
     #GENERATING A MATRIX   
@@ -53,10 +54,10 @@ def patchinterpolate(x_mesh, z_mesh, data):
     for j in range(len(data)-1):
         Arowlst = []
         for i in range(len(data[0])-1):
-            x0 = squarelst[j][i][0][0]
-            z0 = squarelst[j][i][0][1]
-            x1 = squarelst[j][i][1][0]
-            z1 = squarelst[j][i][1][1]
+            x0 = patchlst[j][i][0][0]
+            z0 = patchlst[j][i][0][1]
+            x1 = patchlst[j][i][1][0]
+            z1 = patchlst[j][i][1][1]
             mat = np.array([[1, x0, z0, x0*z0],
                             [1, x1, z0, x1*z0],
                             [1, x0, z1, x0*z1],
