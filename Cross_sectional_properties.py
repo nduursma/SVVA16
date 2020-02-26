@@ -8,23 +8,23 @@ from math import *
 import numpy as np  
 from matplotlib import pyplot as plt
 
-Ca    = 0.505       #Chord Length Aileron 
-la    = 1.611       #Span of the Aileron
-x1    = 0.125       #x-location of hinge 1
-x2    = 0.498       #x-location of hinge 2 
-x3    = 1.494       #x-location of hinge 3
-xa    = 24.5        #Distance between actuator 1 and 2
-h     = 16.1        #Aileron Height 
-tsk   = 1.1         #Skin thickness
-tsp   = 2.4         #Spar Thickness
-tst   = 1.2         #Thickness of stiffener
-hst   = 1.3         #Height of stifffener
-wst   = 1.7         #Width of stiffeners 
-nst   = 11          #Number of stiffeners (equalt spaced)
-d1    = 0.389       #Vertical displacement of hinge 1
-d3    = 1.245       #Vertical displacement of hinge 2
-theta = 30          #Maximum upward deflection 
-P     = 49.2        #Load in actuator 2 
+#Ca    = 0.505       #Chord Length Aileron 
+#la    = 1.611       #Span of the Aileron
+#x1    = 0.125       #x-location of hinge 1
+#x2    = 0.498       #x-location of hinge 2 
+#x3    = 1.494       #x-location of hinge 3
+#xa    = 24.5        #Distance between actuator 1 and 2
+#h     = 16.1        #Aileron Height 
+#tsk   = 1.1         #Skin thickness
+#tsp   = 2.4         #Spar Thickness
+#tst   = 1.2         #Thickness of stiffener
+#hst   = 1.3         #Height of stifffener
+#wst   = 1.7         #Width of stiffeners 
+#nst   = 11          #Number of stiffeners (equalt spaced)
+#d1    = 0.389       #Vertical displacement of hinge 1
+#d3    = 1.245       #Vertical displacement of hinge 2
+#theta = 30          #Maximum upward deflection 
+#P     = 49.2        #Load in actuator 2 
 
 
 def cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst) :
