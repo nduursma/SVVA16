@@ -10,6 +10,10 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,M
 
     # Transformation of some input parameters
 
+    # Determine the distance to the actuators
+    xf = x2 - xa / 2
+    xp = x2 + xa / 2
+
     # Determine the total aerodynamic load
     Vtot = Vlst[-1]
 
@@ -23,10 +27,6 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,M
     # Decompose force P along the y and z axis
     Py = P * np.sin(theta * np.pi / 180)
     Pz = P * np.cos(theta * np.pi / 180)
-
-    # Determine the distance to the actuators
-    xf = x2 - xa / 2
-    xp = x2 + xa / 2
 
     # Calculate constants used in the displacement functions
     EIzz = E * Izz
@@ -99,7 +99,7 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,M
         if x-x3>=0:
             row[iCy] = -1*(x-x3)
         if x-xp>=0:
-            additional_sum += Pz*(x-xp)
+            additional_sum += Py*(x-xp)
         return row,additional_sum
 
     # Torque
@@ -148,7 +148,7 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,M
         if x-x3>=0:
             row[iCz] = 1/(6*EIyy)*(x-x3)**3
         if x-xp>=0:
-            additional_sum += -Py/(6*EIyy)*(x-xp)**3
+            additional_sum += -Pz/(6*EIyy)*(x-xp)**3
         return row,additional_sum
 
     # Twist
@@ -169,15 +169,35 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,M
         return row,additional_sum
 
     # Sum of forces in z direction
-    def Sz():
-        row = np.array([0.,1.,0.,1.,0.,1.,0.,1.,0.,0.,0.,0.,0.])
-        additional_sum = -Pz
+    def Sz(x):
+        row = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.])
+        additional_sum = 0
+        if x-x1>=0:
+            row[iAz] = -1
+        if x-xf>=0:
+            row[iFz] = -1
+        if x-x2>=0:
+            row[iBz] = -1
+        if x-x3>=0:
+            row[iCz] = -1
+        if x-xp>=0:
+            additional_sum += Pz
         return row,additional_sum
 
     # Sum of forces in y direction
-    def Sy():
-        row = np.array([1.,0.,1.,0.,1.,0.,1.,0.,0.,0.,0.,0.,0.])
-        additional_sum = -Py + Vtot
+    def Sy(x):
+        row = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.])
+        additional_sum = (-Vtot)
+        if x-x1>=0:
+            row[iAy] = -1
+        if x-xf>=0:
+            row[iFy] = -1
+        if x-x2>=0:
+            row[iBy] = -1
+        if x-x3>=0:
+            row[iCy] = -1
+        if x-xp>=0:
+            additional_sum += Py
         return row,additional_sum
 
 
@@ -187,8 +207,8 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,M
     A = np.array([My(la)[0],
                   Mz(la)[0],
                   T(la)[0],
-                  Sz()[0],
-                  Sy()[0],
+                  Sz(la)[0],
+                  Sy(la)[0],
                   v(x1)[0]+ftheta(x1)[0]*zsc,
                   v(xf)[0]+ftheta(xf)[0]*zsc,
                   v(x2)[0]+ftheta(x2)[0]*zsc,
@@ -202,8 +222,8 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,M
     c = np.array([[-My(la)[1]],
                   [-Mz(la)[1]],
                   [-T(la)[1]],
-                  [-Sz()[1]],
-                  [-Sy()[1]],
+                  [-Sz(la)[1]],
+                  [-Sy(la)[1]],
                   [d1y-v(x1)[1]-ftheta(x1)[1]*zsc],
                   [-v(xf)[1]-ftheta(xf)[1]*zsc],
                   [-v(x2)[1]-ftheta(x2)[1]*zsc],
