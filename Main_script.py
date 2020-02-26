@@ -61,50 +61,53 @@ for xi in x:
 momentz = np.array(momentz)
 
 
+plt.subplot(231)
 plt.plot(x,y)
 plt.title('Vertical Displacement')
 plt.xlabel('x [m]')
 plt.ylabel('y [m]')
 plt.grid()
-plt.savefig('Vertical_Displacement.jpg')
-plt.show()
 
+
+plt.subplot(232)
 plt.plot(x,z)
 plt.title('Horizontal Displacement')
 plt.xlabel('x [m]')
 plt.ylabel('z [m]')
 plt.grid()
-plt.savefig('Horizontal_Displacement.jpg')
-plt.show()
 
+
+plt.subplot(233)
 plt.plot(x,twist)
 plt.title('Twist')
 plt.xlabel('x [m]')
 plt.ylabel('Theta [rad]')
 plt.grid()
-plt.savefig('Twist.jpg')
-plt.show()
 
+
+plt.subplot(234)
 plt.plot(x,momenty)
 plt.title('Moment around the y axis')
 plt.xlabel('x [m]')
 plt.ylabel('My [Nm]')
 plt.grid()
-plt.savefig('Moment_y.jpg')
-plt.show()
 
+
+plt.subplot(235)
 plt.plot(x,momentz)
 plt.title('Moment around the z axis')
 plt.xlabel('x [m]')
 plt.ylabel('Mz [Nm]')
 plt.grid()
-plt.savefig('Moment_z.jpg')
-plt.show()
 
+
+plt.subplot(236)
 plt.plot(x,torque)
 plt.title('Torque')
 plt.xlabel('x [m]')
 plt.ylabel('T [Nm]')
 plt.grid()
-plt.savefig('Torque.jpg')
+
+
+plt.savefig('Results.jpg')
 plt.show()

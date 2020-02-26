@@ -33,19 +33,12 @@ def cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst) :
     Ic_z  =[]
     Ic_y  =[]
     
-    h     = h/100                                  #h in m 
-    tsk   = tsk/1000         #in m 
-    tsp   = tsp/1000        #in m 
-    tst   = tst/1000         #in m 
-    hst   = hst/100        #in m 
-    wst   = wst/100        #in m 
-    
     r   = h/2                                  #Radius of the semi circular part of the airfoil in m 
     sk  = np.sqrt(r**2 + (Ca-r)**2)      #Length of straight part of the airfoil in m 
     phi = atan((r)/(Ca-r))                 #Angle of the non circular part of the airfoil 
     
     At = (pi*r**2)/2+ r*(Ca-r)
-    print(At)
+    
     
     
     A_sk   = sk*tsk                          #Area of the skin straight panel in m2
@@ -53,7 +46,7 @@ def cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst) :
     A_sp   = (h)*tsp                             #Area of the spar in m2
     Ast    =  (wst*tst + (hst-tst)*tst)                 #Area of a stiffener m2
     
-    print(2*A_sk+A_cir+A_sp+nst*Ast)
+    
     
     ycirc = 0 
     zcirc = -(r-2*(r-tsk)/(pi))  
@@ -117,9 +110,9 @@ def cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst) :
     '''
      
     
-    plt.plot(graph[:,1],graph[:,2],'o')
-    plt.axis('equal')
-    plt.show()
+#    plt.plot(graph[:,1],graph[:,2],'o')
+#    plt.axis('equal')
+#    plt.show()
     
     stiff.append(Skt)
     stiff.append(Skb)
@@ -138,7 +131,7 @@ def cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst) :
     
     #print(stiff[:,5])
     
-    print(stiff[:,1])
+
     
     z   = (stiff[:,1] -zbar)**2
     y   = (stiff[:,2] -ybar)**2 
@@ -190,9 +183,9 @@ def cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst) :
     Iyy = Ispary + Icircy + 2*Isky + sum(stiff[:,9]) - A_cir*(4*r/(3*pi))**2 
     
 
-    plt.plot(zbar,ybar,'o')
-    plt.axis('equal')
-    plt.show()
+#    plt.plot(zbar,ybar,'o')
+#    plt.axis('equal')
+#    plt.show()
     
     
 
