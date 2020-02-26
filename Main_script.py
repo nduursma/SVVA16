@@ -32,7 +32,7 @@ data = np.loadtxt('AERO.dat',delimiter = ',')
 
 zsc = -0.085
 xlst, zlst, qlst = patchinterpolate(600,600,data)
-Vlst, Mlst, defllst, Tlst, thetalst, taulst, qavglst = output(xlst, zlst, qlst, zsc)
+Vlst, Mlst, defllst, Tlst, thetalst = output(xlst, zlst, qlst, zsc)
 Dx, zbar,ybar,Izz,Iyy, stiff = cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst)
 Ay,Az,By,Bz,Cy,Cz,Fy,Fz,C1,C2,C3,C4,C5 = reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,
                                                          Izz, J,xlst,Vlst,Mlst,defllst,Tlst,thetalst)
