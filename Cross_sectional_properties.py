@@ -189,30 +189,14 @@ def cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst) :
     Izz = Isparz + Icircz + 2*Iskz + sum(stiff[:,10]) 
     Iyy = Ispary + Icircy + 2*Isky + sum(stiff[:,9]) - A_cir*(4*r/(3*pi))**2 
     
-    print(zbar)
-    print(ybar)
-    print("Iyy is", Iyy)
-    print("Izz is", Izz)
-    
+
     plt.plot(zbar,ybar,'o')
     plt.axis('equal')
     plt.show()
     
-    ybarv = 0.0
-    zbarv = -0.20362591085157106
-    Iyyv =  4.5943507864451845e-05
-    Izzv =  4.753851442684436e-06
     
-    print(Iyyv)
-    print(Izzv)
-    print("Iyy %",(Iyy-Iyyv)*100/Iyy)
-    print("Izz %",(Izz-Izzv)*100/Izz)
-    print("Z %",(zbarv-zbar)*100/zbar)
 
-    return(zbar,ybar,Izz,Iyy)
+    return(Dx, zbar,ybar,Izz,Iyy, stiff)
     
     #print(stiff)
-zbar,ybar,Izz,Iyy = cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst)
-
-print(Iyy)
-print(Izz)
+#zbar,ybar,Izz,Iyy = cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst)
