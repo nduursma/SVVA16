@@ -44,7 +44,7 @@ def deflections(x,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,defllst
 
     # Moment around the z axis
     def Mz(x):
-        M = (-locationvalue(xlst,x,Mlst)) # Mlst is negative, needs to be +
+        M = (-locationvalue(xlst, x, Mlst))  # Mlst is negative, needs to be +
         if x-x1>=0:
             M += -Ay*(x-x1)
         if x-xf>=0:
@@ -54,21 +54,21 @@ def deflections(x,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,defllst
         if x-x3>=0:
             M += -Cy*(x-x3)
         if x-xp>=0:
-            M += Pz*(x-xp)
+            M += Py*(x-xp)
         return M
 
     # Torque
     def T(x):
         Torque = locationvalue(xlst,x,Tlst)
         if x-x1>=0:
-            Torque += Ay*(-zsc)
+            Torque += Ay*abs(zsc-h/2)
         if x-xf>=0:
             Torque += Fy*(-zsc)
             Torque += Fz*(-h/2)
         if x-x2>=0:
-            Torque += By*(-zsc)
+            Torque += By*abs(zsc-h/2)
         if x-x3>=0:
-            Torque += Cy*(-zsc)
+            Torque += Cy*abs(zsc-h/2)
         if x-xp>=0:
             Torque += -Py*(-zsc)+Pz*h/2
         return Torque
@@ -107,21 +107,20 @@ def deflections(x,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,defllst
     def ftheta(x):
         twist = locationvalue(xlst,x,thetalst)/GJ + C5
         if x-x1>=0:
-            twist += Ay/GJ*(-zsc)*(x-x1)
+            twist += Ay/GJ*abs(zsc-h/2)*(x-x1)
         if x-xf>=0:
             twist += Fy/GJ*(-zsc)*(x-xf)
             twist += Fz/GJ*h/2*(x-xf)
         if x-x2>=0:
-            twist += By/GJ*(-zsc)*(x-x2)
+            twist += By/GJ*abs(zsc-h/2)*(x-x2)
         if x-x3>=0:
-            twist += Cy/GJ*(-zsc)*(x-x3)
+            twist += Cy/GJ*abs(zsc-h/2)*(x-x3)
         if x-xp>=0:
             twist += -Py/GJ*(-zsc)*(x-xp)+Pz/GJ*h/2*(x-xp)
         return twist
 
     # Sum of forces in z direction
     def Sz(x):
-        row = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.])
         Sumz = 0
         if x-x1>=0:
             Sumz += Az
@@ -137,7 +136,6 @@ def deflections(x,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,defllst
 
     # Sum of forces in y direction
     def Sy(x):
-        row = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.])
         Sumy = Vtot
         if x-x1>=0:
             Sumy += Ay
@@ -151,6 +149,7 @@ def deflections(x,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,defllst
             Sumy += -Py
         return Sumy
 
+
     Myx = My(x)
     Mzx = Mz(x)
     Tx = T(x)
@@ -162,7 +161,8 @@ def deflections(x,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,defllst
 
     return Myx,Mzx,Tx,Syx,Szx,vx,wx,thetax
 
-'''
+
+
 from Interpolation import patchinterpolate
 from NEW_Forces_Deflections import output
 from Reaction_Forces import reaction_forces
@@ -183,7 +183,7 @@ G     = 28E9        # [Pa]
 Iyy   = 4.59E-5     # [m4]
 Izz   = 4.75E-6     # [m4]
 J     = 7.749E-6    # [m4]
-zsc   = -0.085      # [m]
+zsc   = -0.0855     # [m]
 P     = 49.2E3      # [N]
 
 data = np.loadtxt('AERO.dat',delimiter = ',')
@@ -197,12 +197,19 @@ x = np.arange(0,la+dx,dx)
 y = []
 z = []
 twist = []
+momenty = []
+momentz = []
+torque = []
+
 for xi in x:
     Myx,Mzx,Tx,Syx,Szx,vx,wx,thetax = deflections(xi,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,defllst,Tlst,thetalst,Ay,Az,By,Bz,Cy,Cz,Fy,Fz,C1,C2,C3,C4,C5)
     y.append(vx+thetax*zsc)
     z.append(wx)
     twist.append(thetax)
-y = np.array(y)
+    momenty.append(Myx)
+    momentz.append(Mzx)
+    torque.append(Tx)
+momentz = np.array(momentz)
 
 plt.plot(x,y)
 plt.title('Vertical Displacement')
@@ -227,4 +234,27 @@ plt.ylabel('Theta [rad]')
 plt.grid()
 plt.savefig('Twist.jpg')
 plt.show()
-'''
+
+plt.plot(x,momenty)
+plt.title('Moment around the y axis')
+plt.xlabel('x [m]')
+plt.ylabel('My [Nm]')
+plt.grid()
+plt.savefig('Moment_y.jpg')
+plt.show()
+
+plt.plot(x,momentz)
+plt.title('Moment around the z axis')
+plt.xlabel('x [m]')
+plt.ylabel('Mz [Nm]')
+plt.grid()
+plt.savefig('Moment_z.jpg')
+plt.show()
+
+plt.plot(x,torque)
+plt.title('Torque')
+plt.xlabel('x [m]')
+plt.ylabel('T [Nm]')
+plt.grid()
+plt.savefig('Torque.jpg')
+plt.show()

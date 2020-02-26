@@ -107,14 +107,14 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,M
         row = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.])
         additional_sum = locationvalue(xlst,x,Tlst)
         if x-x1>=0:
-            row[iAy] = -zsc
+            row[iAy] = abs(zsc-h/2)
         if x-xf>=0:
-            row[iFy] = -zsc
+            row[iFy] = (-zsc)
             row[iFz] = -h/2
         if x-x2>=0:
-            row[iBy] = -zsc
+            row[iBy] = abs(zsc-h/2)
         if x-x3>=0:
-            row[iCy] = -zsc
+            row[iCy] = abs(zsc-h/2)
         if x-xp>=0:
             additional_sum += -Py*(-zsc)+Pz*h/2
         return row, additional_sum
@@ -156,14 +156,14 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,M
         row = np.array([0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,1.])
         additional_sum = locationvalue(xlst,x,thetalst)/GJ
         if x-x1>=0:
-            row[iAy] = 1/GJ*(-zsc)*(x-x1)
+            row[iAy] = 1/GJ*abs(zsc-h/2)*(x-x1)
         if x-xf>=0:
             row[iFy] = 1/GJ*(-zsc)*(x-xf)
             row[iFz] = 1/GJ*h/2*(x-xf)
         if x-x2>=0:
-            row[iBy] = 1/GJ*(-zsc)*(x-x2)
+            row[iBy] = 1/GJ*abs(zsc-h/2)*(x-x2)
         if x-x3>=0:
-            row[iCy] = 1/GJ*(-zsc)*(x-x3)
+            row[iCy] = 1/GJ*abs(zsc-h/2)*(x-x3)
         if x-xp>=0:
             additional_sum += -Py/GJ*(-zsc)*(x-xp)+Pz/GJ*h/2*(x-xp)
         return row,additional_sum
@@ -279,5 +279,5 @@ data = np.loadtxt('AERO.dat',delimiter = ',')
 xlst, zlst, qlst = patchinterpolate(600,600,data)
 Vlst,Mlst,defllst,Tlst,thetalst = output(xlst,zlst,qlst,zsc)
 
-Ay,Az,By,Bz,Cy,Cz,Fy,Fz,C1,C2,C3,C4,C5 = reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,defllst,Tlst,thetalst)
+Ay,Az,By,Bz,Cy,Cz,Fy,Fz,C1,C2,C3,C4,C5,b = reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,defllst,Tlst,thetalst)
 '''
