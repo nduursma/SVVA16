@@ -7,7 +7,7 @@ Created on Mon Feb 24 14:43:17 2020
 import numpy as np
 import matplotlib.pyplot as plt
 from math import *
-import cross_sect_prop
+from Cross_sectional_properties import cross_sect_prop
 
 
 Ca    = 0.505       #Chord Length Aileron
