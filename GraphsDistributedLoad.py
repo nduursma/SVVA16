@@ -20,7 +20,7 @@ ca = 0.505 #m
 la = 1.611 #m
 
 #Read data of distributed load magnitude
-data = np.loadtxt('AERO.dat',delimiter = ',')  #Creating an Array from the aerodynamic load data file
+#data = np.loadtxt('AERO.dat',delimiter = ',')  #Creating an Array from the aerodynamic load data file
 
 #Calculate locations of X and Z coordinates
 #Nz = len(data)

@@ -8,7 +8,7 @@ Created on Mon Feb 17 12:00:00 2020
 import numpy as np
 from math import pi 
 
-data = np.loadtxt('AERO.dat',delimiter = ',')
+#data = np.loadtxt('AERO.dat',delimiter = ',')
 
 def patchinterpolate(x_mesh, z_mesh, xlst, zlst, data):
     
@@ -103,7 +103,7 @@ def patchinterpolate(x_mesh, z_mesh, xlst, zlst, data):
         for k in range(len(z_lst)):
             pxz_row = []
             z_coordinate = z_lst[k]            
-            if z2 <= z_coordinate <= z1: 
+            if abs(z1) <= abs(z_coordinate) <= abs(z2): 
                 for i in range(len(xlst)-1):
                     x1 = xlst[i]
                     x2 = xlst[i+1]
@@ -112,7 +112,7 @@ def patchinterpolate(x_mesh, z_mesh, xlst, zlst, data):
                         if x1 <= x_coordinate <= x2:
                             pxz = a_lst[j][i][0] + a_lst[j][i][1]*x_coordinate + a_lst[j][i][2]*z_coordinate + a_lst[j][i][3]*x_coordinate*z_coordinate
                             pxz_row.append(float(pxz))
-            if len(pxz_row) != 0:        
+            if len(pxz_row) != 0:  
                 pxz_lst.append(pxz_row)
                 
     return x_lst, z_lst, np.array(pxz_lst)
