@@ -33,7 +33,7 @@ G     = 28E9        # [Pa]
 
 # Calculated parameters
 J     = CalcTorsStif(Ca,h,tsk,tsp)
-zsc = -0.0855       # [m]
+zsc = -0.08005       # [m]
 Dx, zbar,ybar,Izz,Iyy, stiff = cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst)
 
 
@@ -182,7 +182,7 @@ plt.grid()
 
 plt.subplot(223)
 plt.plot(x,taulst)
-plt.title('Torque distribution')
+plt.title('Distributed torque')
 plt.xlabel('x [m]')
 plt.ylabel('tau(x) [Nm]')
 plt.grid()

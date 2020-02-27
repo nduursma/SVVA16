@@ -108,13 +108,13 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,M
         row = np.array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.])
         additional_sum = locationvalue(xlst,x,Tlst)
         if x-x1>=0:
-            row[iAy] = zsc-h/2
+            row[iAy] = -(zsc-h/2)
         if x-xf>=0:
             row[iF] = CFy*(-zsc)-CFz*h/2
         if x-x2>= 0:
-            row[iBy] = zsc-h/2
+            row[iBy] = -(zsc-h/2)
         if x-x3>= 0:
-            row[iCy] = zsc-h/2
+            row[iCy] = -(zsc-h/2)
         if x-xp>=0:
             additional_sum += -Py*(-zsc)+Pz*h/2
         return row,additional_sum
@@ -159,13 +159,13 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,M
         row = np.array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1.])
         additional_sum = locationvalue(xlst,x,thetalst)/GJ
         if x-x1>=0:
-            row[iAy] = 1/GJ*(zsc-h/2)*(x-x1)
+            row[iAy] = 1/GJ*(-(zsc-h/2))*(x-x1)
         if x-xf>=0:
             row[iF] = CFy/GJ*(-zsc)*(x-xf)-CFz/GJ*h/2*(x-xf)
         if x-x2>=0:
-            row[iBy] = 1/GJ*(zsc-h/2)*(x-x2)
+            row[iBy] = 1/GJ*(-(zsc-h/2))*(x-x2)
         if x-x3>=0:
-            row[iCy] = 1/GJ*(zsc-h/2)*(x-x3)
+            row[iCy] = 1/GJ*(-(zsc-h/2))*(x-x3)
         if x-xp>=0:
             additional_sum += -Py/GJ*(-zsc)*(x-xp)+Pz/GJ*h/2*(x-xp)
         return row,additional_sum

@@ -88,7 +88,7 @@ def output(xlst, zlst, qlst, sc):
     Mlst = np.array(Mlst)*1000        # [Nm]
     d1lst = np.array(d1lst)*1000      # [/m]
     defllst = np.array(defllst)*1000  # [m]
-    taulst = np.array(taulst)*1000
+    taulst = np.array(taulst)*1000    # [Nm/m]
     Tlst = np.array(Tlst)*1000        # [Nm]
 
     return Vlst, Mlst, d1lst, defllst, taulst, Tlst, thetalst
