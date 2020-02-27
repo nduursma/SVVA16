@@ -20,8 +20,8 @@ def output(xlst, zlst, qlst, sc):
     
     Nz = len(qlst)
     Nx = len(qlst[0])
-    dz = 1/(Nz-1)*zlst[-1]
-    dx = 1/(Nx-1)*xlst[-1]
+    dz = 1/(Nz-1)*(zlst[-1]-zlst[0])
+    dx = 1/(Nx-1)*(xlst[-1]-xlst[0])
     
     qavglst = [] 
     taulst = []
@@ -68,19 +68,20 @@ def output(xlst, zlst, qlst, sc):
         V = V + (qavglst[p-1]+qavglst[p])*dx/2
         Vlst.append(V)
         
-        M = M + (qavglst[p-1]*((p-1)*dx)+qavglst[p]*(p*dx))*dx/2
+        #M = M + (qavglst[p-1]*((p-1)*dx)+qavglst[p]*(p*dx))*dx/2
+        M = M + (Vlst[p-1]+Vlst[p])*dx/2
         Mlst.append(M)
   
-        d1 =  d1 + (qavglst[p-1]*(((p-1)*dx)**2)/2+qavglst[p]*((p*dx)**2)/2)*dx/2
+        d1 =  d1 + (Mlst[p-1]+Mlst[p])*dx/2
         d1lst.append(d1)
         
-        defl = defl + (qavglst[p-1]*(((p-1)*dx)**3)/3+qavglst[p]*((p*dx)**3)/3)*dx/2
+        defl = defl + (d1lst[p-1]+d1lst[p])*dx/2
         defllst.append(defl)
         
         T = T + (taulst[p-1]+taulst[p])*dx/2
         Tlst.append(T)
         
-        theta = theta +  (taulst[p-1]*((p-1)*dx)+taulst[p]*(p*dx))*dx/2
+        theta = theta +  (Tlst[p-1]+Tlst[p])*dx/2
         thetalst.append(theta)
 
     Vlst = np.array(Vlst)*1000        # [N]
