@@ -86,10 +86,11 @@ def output(xlst, zlst, qlst, sc):
 
     Vlst = np.array(Vlst)*1000        # [N]
     Mlst = np.array(Mlst)*1000        # [Nm]
+    d1lst = np.array(d1lst)*1000      # [/m]
     defllst = np.array(defllst)*1000  # [m]
     Tlst = np.array(Tlst)*1000        # [Nm]
 
-    return Vlst, Mlst, defllst, Tlst, thetalst
+    return Vlst, Mlst, d1lst, defllst, Tlst, thetalst
 
 #Vlst, Mlst, defllst, Tlst, thetalst = output(sc)
 #print(' V', Vlst[-1], '\n M_z', Mlst[-1], '\n Deflection', defllst[-1],'/EI \n Torque', Tlst[-1], '\n Theta', thetalst[-1],'/GJ')
