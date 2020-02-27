@@ -10,29 +10,29 @@ from math import pi
 
 data = np.loadtxt('AERO.dat',delimiter = ',')
 
-def patchinterpolate(x_mesh, z_mesh, data):
+def patchinterpolate(x_mesh, z_mesh, xlst, zlst, data):
     
     #GETTING X AND Z VALUES OF DATA
     
-    xlst = []
-    zlst = []
-    Nz = len(data)
-    Nx = len(data[0])
-    ca = 0.505
-    la = 1.611
-    
-    for i in range(1,Nz+1):  
-        thetazi  = (i-1)/Nz*pi
-        thetazi1 = (i)/Nz*pi
-        z  =  -(1/2)*((ca/2)*(1-np.cos(thetazi))+(ca/2)*(1-np.cos(thetazi1)))    
-        zlst.append(z)
-    
-    for k in range(1,Nx+1):
-        thetaxk  = (k-1)/Nx*pi
-        thetaxk1 = (k)/Nx*pi
-        x  = (1/2)*((la/2)*(1-np.cos(thetaxk))+(la/2)*(1-np.cos(thetaxk1)))   
-        xlst.append(x)
-      
+#    xlst = []
+#    zlst = []
+#    Nz = len(data)
+#    Nx = len(data[0])
+#    ca = 0.505
+#    la = 1.611
+#    
+#    for i in range(1,Nz+1):  
+#        thetazi  = (i-1)/Nz*pi
+#        thetazi1 = (i)/Nz*pi
+#        z  =  -(1/2)*((ca/2)*(1-np.cos(thetazi))+(ca/2)*(1-np.cos(thetazi1)))    
+#        zlst.append(z)
+#    
+#    for k in range(1,Nx+1):
+#        thetaxk  = (k-1)/Nx*pi
+#        thetaxk1 = (k)/Nx*pi
+#        x  = (1/2)*((la/2)*(1-np.cos(thetaxk))+(la/2)*(1-np.cos(thetaxk1)))   
+#        xlst.append(x)
+#      
     #INTERPOLATION
 
     #GENERATING LIST OF ALL PATCHES

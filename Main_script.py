@@ -31,12 +31,48 @@ J     = CalcTorsStif(Ca,h,tsk,tsp)
 
 data = np.loadtxt('AERO.dat',delimiter = ',')
 
-zsc = -0.085
-xlst, zlst, qlst = patchinterpolate(600,600,data)
+xl = []
+zl = []
+Nz = len(data)
+Nx = len(data[0])
+ca = 0.505
+la = 1.611
+
+for i in range(1,Nz+1):  
+    thetazi  = (i-1)/Nz*np.pi
+    thetazi1 = (i)/Nz*np.pi
+    z  =  -(1/2)*((ca/2)*(1-np.cos(thetazi))+(ca/2)*(1-np.cos(thetazi1)))    
+    zl.append(z)
+
+for k in range(1,Nx+1):
+    thetaxk  = (k-1)/Nx*np.pi
+    thetaxk1 = (k)/Nx*np.pi
+    x  = (1/2)*((la/2)*(1-np.cos(thetaxk))+(la/2)*(1-np.cos(thetaxk1)))   
+    xl.append(x)
+
+
+zsc = -0.08
+xlst, zlst, qlst = patchinterpolate(600,600,xl,zl,data)
 Vlst, Mlst, defllst, Tlst, thetalst = output(xlst, zlst, qlst, zsc)
 Dx, zbar,ybar,Izz,Iyy, stiff = cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst)
 Ay,Az,By,Bz,Cy,Cz,Fy,Fz,C1,C2,C3,C4,C5 = reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,
                                                          Izz, J,xlst,Vlst,Mlst,defllst,Tlst,thetalst)
+#Ay = 37833
+#Az = -244102
+#By = -58360
+#Bz = 331972
+#Cy = 17893
+#Cz = -81694
+#F = 42068
+#
+#Fy = F*np.sin(theta*np.pi/180)
+#Fz = F*np.cos(theta*np.pi/180)
+#
+#C1 = -0.011
+#C2 = 0.0048
+#C3 = 0.0068
+#C4 = -0.0028
+#C5 = -0.0032
 
 x = xlst #np.arange(0,la+dx,dx)
 y = []
