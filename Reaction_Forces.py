@@ -176,32 +176,32 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,M
         row = np.array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.])
         additional_sum = 0
         if x-x1>=0:
-            row[iAz] = -1
+            row[iAz] = 1
         if x-xf>=0:
-            row[iF] = -CFz
+            row[iF] = CFz
         if x-x2>=0:
-            row[iBz] = -1
+            row[iBz] = 1
         if x-x3>=0:
-            row[iCz] = -1
+            row[iCz] = 1
         if x-xp>=0:
-            additional_sum += Pz
+            additional_sum += -Pz
         return row,additional_sum
 
 
     # Sum of forces in y direction
     def Sy(x):
         row = np.array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.])
-        additional_sum = (-Vtot)
+        additional_sum = Vtot
         if x-x1>=0:
-            row[iAy] = -1
+            row[iAy] = 1
         if x-xf>=0:
-            row[iF] = -CFy
+            row[iF] = CFy
         if x-x2>=0:
-            row[iBy] = -1
+            row[iBy] = 1
         if x-x3>=0:
-            row[iCy] = -1
+            row[iCy] = 1
         if x-xp>=0:
-            additional_sum += Py
+            additional_sum += -Py
         return row,additional_sum
 
 

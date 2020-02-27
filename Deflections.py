@@ -1,7 +1,7 @@
 import numpy as np
 from NEW_Forces_Deflections import locationvalue
 
-def deflections(x,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,defllst,Tlst,thetalst,Ay,Az,By,Bz,Cy,Cz,Fy,Fz,C1,C2,C3,C4,C5):
+def deflections(x,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,d1lst,defllst,Tlst,thetalst,Ay,Az,By,Bz,Cy,Cz,Fy,Fz,C1,C2,C3,C4,C5):
 
     # Transformation of some input parameters
 
@@ -72,6 +72,21 @@ def deflections(x,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,defllst
             Torque += -Py*(-zsc)+Pz*h/2
         return Torque
 
+    # Slope in y direction
+    def vs(x):
+        slope = locationvalue(xlst,x,d1lst)
+        if x-x1>=0:
+            slope += Ay/(2*EIzz)*(x-x1)**2
+        if x-xf>=0:
+            slope += Fy/(2*EIzz)*(x-xf)**2
+        if x-x2>=0:
+            slope += By/(2*EIzz)*(x-x2)**2
+        if x-x3>=0:
+            slope += Cy/(2*EIzz)*(x-x3)**2
+        if x-xp>=0:
+            slope += -Py/(2*EIzz)*(x-xp)**2
+        return slope
+
     # Displacement in y direction
     def v(x):
         defl = locationvalue(xlst,x,defllst)/EIzz + C1*x + C2
@@ -86,6 +101,21 @@ def deflections(x,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,defllst
         if x-xp>=0:
             defl += -Py/(6*EIzz)*(x-xp)**3
         return defl
+
+    # Slope in z direction
+    def ws(x):
+        slope = 0
+        if x-x1>=0:
+            slope += Az/(2*EIyy)*(x-x1)**2
+        if x-xf>=0:
+            slope += Fz/(2*EIyy)*(x-xf)**2
+        if x-x2>=0:
+            slope += Bz/(2*EIyy)*(x-x2)**2
+        if x-x3>=0:
+            slope += Cz/(2*EIyy)*(x-x3)**2
+        if x-xp>=0:
+            slope += -Pz/(2*EIyy)*(x-xp)**2
+        return slope
 
     # Displacement in z direction
     def w(x):
@@ -121,30 +151,30 @@ def deflections(x,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,defllst
     def Sz(x):
         Sumz = 0
         if x-x1>=0:
-            Sumz += Az
+            Sumz += -Az
         if x-xf>=0:
-            Sumz += Fz
+            Sumz += -Fz
         if x-x2>=0:
-            Sumz += Bz
+            Sumz += -Bz
         if x-x3>=0:
-            Sumz += Cz
+            Sumz += -Cz
         if x-xp>=0:
-            Sumz += -Pz
+            Sumz += Pz
         return Sumz
 
     # Sum of forces in y direction
     def Sy(x):
-        Sumy = Vtot
+        Sumy = -Vtot
         if x-x1>=0:
-            Sumy += Ay
+            Sumy += -Ay
         if x-xf>=0:
-            Sumy += Fy
+            Sumy += -Fy
         if x-x2>=0:
-            Sumy += By
+            Sumy += -By
         if x-x3>=0:
-            Sumy += Cy
+            Sumy += -Cy
         if x-xp>=0:
-            Sumy += -Py
+            Sumy += Py
         return Sumy
 
 
@@ -153,11 +183,13 @@ def deflections(x,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,defllst
     Tx = T(x)
     Syx = Sy(x)
     Szx = Sz(x)
+    vsx = vs(x)
     vx = v(x)
+    wsx = ws(x)
     wx = w(x)
     thetax = ftheta(x)
 
-    return Myx,Mzx,Tx,Syx,Szx,vx,wx,thetax
+    return Myx,Mzx,Tx,Syx,Szx,vsx,vx,wsx,wx,thetax
 
 
 '''
@@ -210,12 +242,12 @@ for xi in x:
     torque.append(Tx)
     sheary.append(Syx)
 
+
 plt.plot(x,y)
-plt.title('Vertical Displacement')
+plt.title('Vertical displacement')
 plt.xlabel('x [m]')
 plt.ylabel('y [m]')
 plt.grid()
-plt.savefig('Vertical_Displacement.jpg')
 plt.show()
 
 plt.plot(x,z)
@@ -223,15 +255,6 @@ plt.title('Horizontal Displacement')
 plt.xlabel('x [m]')
 plt.ylabel('z [m]')
 plt.grid()
-plt.savefig('Horizontal_Displacement.jpg')
-plt.show()
-
-plt.plot(x,twist)
-plt.title('Twist')
-plt.xlabel('x [m]')
-plt.ylabel('Theta [rad]')
-plt.grid()
-plt.savefig('Twist.jpg')
 plt.show()
 
 plt.plot(x,momenty)
@@ -239,7 +262,6 @@ plt.title('Moment around the y axis')
 plt.xlabel('x [m]')
 plt.ylabel('My [Nm]')
 plt.grid()
-plt.savefig('Moment_y.jpg')
 plt.show()
 
 plt.plot(x,momentz)
@@ -247,7 +269,6 @@ plt.title('Moment around the z axis')
 plt.xlabel('x [m]')
 plt.ylabel('Mz [Nm]')
 plt.grid()
-plt.savefig('Moment_z.jpg')
 plt.show()
 
 plt.plot(x,torque)
@@ -255,6 +276,12 @@ plt.title('Torque')
 plt.xlabel('x [m]')
 plt.ylabel('T [Nm]')
 plt.grid()
-plt.savefig('Torque.jpg')
+plt.show()
+
+plt.plot(x,twist)
+plt.title('Twist')
+plt.xlabel('x [m]')
+plt.ylabel('Twist [rad]')
+plt.grid()
 plt.show()
 '''
