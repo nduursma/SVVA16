@@ -459,9 +459,8 @@ def MaxStress(vonmisestot,ytot,ztot):
     return zmax, ymax, maxstress
     
 
-def AileronFullStress(Sy,Sz,My,Mz,T,Ca,h,la,tsp,tsk,Iyy,Izz,zbar,Dx):
+def AileronFullStress(x,Sy,Sz,My,Mz,T,Ca,h,la,tsp,tsk,Iyy,Izz,zbar,Dx,stiff):
     #define x
-    x = np.linspace(0,la,step)
     
     maxstresslist = []
     zcoordlist = []
@@ -473,7 +472,7 @@ def AileronFullStress(Sy,Sz,My,Mz,T,Ca,h,la,tsp,tsk,Iyy,Izz,zbar,Dx):
         q1,q2,q3,q4,theta,s2,s3,s4 = CalcCombineShear(h,Ca,tsk,tsp,Iyy,Izz,zbar,Sy[i],Sz[i],stiff,Dx,T[i])
         
         #Find bending stresses
-        sigmax1, sigmax2, sigmax3, sigmax4 = CalcDirectStress(My[i],Mz[i],Izz,Iyy,zbar,theta,s2,s3,s4)
+        sigmax1, sigmax2, sigmax3, sigmax4 = CalcDirectStress(h,Ca,My[i],Mz[i],Izz,Iyy,zbar,theta,s2,s3,s4)
         
         #Find vonmises
         vonmises1, vonmises2, vonmises3, vonmises4 = CalcAllVonMises(tsk,tsp,sigmax1,sigmax2,sigmax3,sigmax4,q1,q2,q3,q4)

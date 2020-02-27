@@ -7,7 +7,7 @@ from Cross_sectional_properties import cross_sect_prop
 from ShearCalcs import CalcTorsStif
 import matplotlib.pyplot as plt
 from Deflections import deflections
-from AllStressCalcs import CalcShearCenter
+from AllStressCalcs import CalcShearCenter,AileronFullStress
 
 
 # Input parameters
@@ -63,7 +63,7 @@ for k in range(1,Nx+1):
 
 
 # Interpolate the aerodynamic load
-xlst, zlst, qlst = patchinterpolate(1500,600,xl,zl,data)
+xlst, zlst, qlst = patchinterpolate(600,600,xl,zl,data)
 
 
 # Integrate the aerodynamic load
@@ -104,6 +104,9 @@ for xi in x:
     twist.append(thetax)
     torque.append(Tx)
 
+maximumstress,zloc,yloc,xloc = AileronFullStress(x,sheary,shearz,momenty,momentz,torque,Ca,h,la,tsp,tsk,Iyy,Izz,zbar,Dx,stiff)
+
+'''
 # y
 plt.subplot(221)
 plt.plot(x,y)
@@ -188,4 +191,26 @@ plt.xlabel('x [m]')
 plt.ylabel('tau(x) [Nm]')
 plt.grid()
 
+plt.show()
+'''
+
+plt.plot(x,y)
+plt.title('Deflection in y direction')
+plt.xlabel('x [m]')
+plt.ylabel('v(x) [m]')
+plt.grid()
+plt.show()
+
+plt.plot(x,z)
+plt.title('Deflection in z direction')
+plt.xlabel('x [m]')
+plt.ylabel('w(x) [m]')
+plt.grid()
+plt.show()
+
+plt.plot(x,twist)
+plt.title('Twist')
+plt.xlabel('x [m]')
+plt.ylabel('theta(x) [rad]')
+plt.grid()
 plt.show()
