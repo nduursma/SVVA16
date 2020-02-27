@@ -48,16 +48,17 @@ def CreatePlots(xlst,zlst,qlst):
     Y = qlst
     
     plt.figure()
+    plt.subplot(211)
     cp = plt.contourf(X, Z, Y )
     plt.colorbar(cp)
     
     plt.title('Contour Plot Distributed Load on Airleron [kN/m^2]')
     plt.xlabel('X along wingspan [m]')
     plt.ylabel('Z along chord [m]')
-    plt.show()
     
     
     #Create 3D plot
+    plt.subplot(212)
     ax = plt.axes(projection='3d')
     
     ax.plot_surface(X, Z, Y, rstride=1, cstride=1,
