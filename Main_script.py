@@ -33,7 +33,7 @@ G     = 28E9        # [Pa]
 
 # Calculated parameters
 J     = CalcTorsStif(Ca,h,tsk,tsp)
-zsc = -0.08005       # [m]
+zsc = -0.085       # [m]
 Dx, zbar,ybar,Izz,Iyy, stiff = cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst)
 
 
@@ -71,7 +71,6 @@ Vlst, Mlst, d1lst, defllst, taulst, Tlst, thetalst = output(xlst, zlst, qlst, zs
 Ay,Az,By,Bz,Cy,Cz,Fy,Fz,C1,C2,C3,C4,C5 = reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,
                                                          Izz, J,xlst,Vlst,Mlst,defllst,Tlst,thetalst)
 
-
 # Creating the plots
 x = xlst #np.arange(0,la+dx,dx)
 
@@ -86,7 +85,7 @@ momenty = []
 shearz = []
 
 twist = []
-torquedist = []
+torque = []
 
 for xi in x:
     Myx,Mzx,Tx,Syx,Szx,vsx,vx,wsx,wx,thetax = deflections(xi,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,d1lst,defllst,Tlst,thetalst,Ay,Az,By,Bz,Cy,Cz,Fy,Fz,C1,C2,C3,C4,C5)
@@ -101,7 +100,7 @@ for xi in x:
     shearz.append(Szx)
 
     twist.append(thetax)
-    torquedist.append(Tx)
+    torque.append(Tx)
 
 # y
 plt.subplot(221)
@@ -174,7 +173,7 @@ plt.ylabel('theta(x) [rad]')
 plt.grid()
 
 plt.subplot(222)
-plt.plot(x,torquedist)
+plt.plot(x,torque)
 plt.title('Torque')
 plt.xlabel('x [m]')
 plt.ylabel("T(x) [/m]")

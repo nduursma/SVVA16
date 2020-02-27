@@ -61,13 +61,13 @@ def deflections(x,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,d1lst,d
     def T(x):
         Torque = locationvalue(xlst,x,Tlst)
         if x-x1>=0:
-            Torque += Ay*(-(zsc-h/2))
+            Torque += Ay*(-(zsc+h/2))
         if x-xf>=0:
             Torque += Fy*(-zsc) - Fz*(h/2)
         if x-x2>=0:
-            Torque += By*(-(zsc-h/2))
+            Torque += By*(-(zsc+h/2))
         if x-x3>=0:
-            Torque += Cy*(-(zsc-h/2))
+            Torque += Cy*(-(zsc+h/2))
         if x-xp>=0:
             Torque += -Py*(-zsc)+Pz*h/2
         return Torque
@@ -132,17 +132,17 @@ def deflections(x,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,d1lst,d
             defl += -Py/(6*EIyy)*(x-xp)**3
         return defl
 
-    # Twist
+    # Angle
     def ftheta(x):
         twist = locationvalue(xlst,x,thetalst)/GJ + C5
         if x-x1>=0:
-            twist += Ay/GJ*(-(zsc-h/2))*(x-x1)
+            twist += Ay/GJ*(-(zsc+h/2))*(x-x1)
         if x-xf>=0:
             twist += Fy/GJ*(-zsc)*(x-xf) - Fz/GJ*h/2*(x-xf)
         if x-x2>=0:
-            twist += By/GJ*(-(zsc-h/2))*(x-x2)
+            twist += By/GJ*(-(zsc+h/2))*(x-x2)
         if x-x3>=0:
-            twist += Cy/GJ*(-(zsc-h/2))*(x-x3)
+            twist += Cy/GJ*(-(zsc+h/2))*(x-x3)
         if x-xp>=0:
             twist += -Py/GJ*(-zsc)*(x-xp)+Pz/GJ*h/2*(x-xp)
         return twist

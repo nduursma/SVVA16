@@ -108,13 +108,13 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,M
         row = np.array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.])
         additional_sum = locationvalue(xlst,x,Tlst)
         if x-x1>=0:
-            row[iAy] = -(zsc-h/2)
+            row[iAy] = -(zsc+h/2)
         if x-xf>=0:
             row[iF] = CFy*(-zsc)-CFz*h/2
         if x-x2>= 0:
-            row[iBy] = -(zsc-h/2)
+            row[iBy] = -(zsc+h/2)
         if x-x3>= 0:
-            row[iCy] = -(zsc-h/2)
+            row[iCy] = -(zsc+h/2)
         if x-xp>=0:
             additional_sum += -Py*(-zsc)+Pz*h/2
         return row,additional_sum
@@ -159,13 +159,13 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,M
         row = np.array([0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 1.])
         additional_sum = locationvalue(xlst,x,thetalst)/GJ
         if x-x1>=0:
-            row[iAy] = 1/GJ*(-(zsc-h/2))*(x-x1)
+            row[iAy] = 1/GJ*(-(zsc+h/2))*(x-x1)
         if x-xf>=0:
             row[iF] = CFy/GJ*(-zsc)*(x-xf)-CFz/GJ*h/2*(x-xf)
         if x-x2>=0:
-            row[iBy] = 1/GJ*(-(zsc-h/2))*(x-x2)
+            row[iBy] = 1/GJ*(-(zsc+h/2))*(x-x2)
         if x-x3>=0:
-            row[iCy] = 1/GJ*(-(zsc-h/2))*(x-x3)
+            row[iCy] = 1/GJ*(-(zsc+h/2))*(x-x3)
         if x-xp>=0:
             additional_sum += -Py/GJ*(-zsc)*(x-xp)+Pz/GJ*h/2*(x-xp)
         return row,additional_sum
@@ -227,11 +227,11 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,M
                   [-T(la)[1]],
                   [-Sz(la)[1]],
                   [-Sy(la)[1]],
-                  [d1y - v(x1)[1] - ftheta(x1)[1]*zsc],
-                  [-v(x2)[1] - ftheta(x2)[1]*zsc],
-                  [d3y - v(x3)[1] - ftheta(x3)[1]*zsc],
+                  [d1y - (v(x1)[1] - ftheta(x1)[1]*zsc)],
+                  [-(v(x2)[1] - ftheta(x2)[1]*zsc)],
+                  [d3y - (v(x3)[1] - ftheta(x3)[1]*zsc)],
                   [d1z - w(x1)[1]],
-                  [-(w(xf)[1] - ftheta(xf)[1]*h/2)/np.cos(theta*np.pi/180)],
+                  [-(w(xf)[1] + ftheta(xf)[1]*h/2)/np.cos(theta*np.pi/180)],
                   [-w(x2)[1]],
                   [d3z - w(x3)[1]]])
 
@@ -244,7 +244,7 @@ def reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,M
     Bz = b[iBz][0]
     Cy = b[iCy][0]
     Cz = b[iCz][0]
-    F = b[iF][0]
+    F  = b[iF][0]
     C1 = b[iC1][0]
     C2 = b[iC2][0]
     C3 = b[iC3][0]
