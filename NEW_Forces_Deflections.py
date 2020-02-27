@@ -20,8 +20,8 @@ def output(xlst, zlst, qlst, sc):
     
     Nz = len(qlst)
     Nx = len(qlst[0])
-    dz = 1/(Nz-1)*zlst[-1]
-    dx = 1/(Nx-1)*xlst[-1]
+    dz = 1/(Nz-1)*(zlst[-1]-zlst[0])
+    dx = 1/(Nx-1)*(xlst[-1]-xlst[0])
     
     qavglst = [] 
     taulst = []
