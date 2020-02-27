@@ -322,7 +322,7 @@ def CalcShearFlow(h,Ca,tsk,tsp,Iyy,Izz,zbar,Sy,Sz,stiff,Dx):
 
     return q1,q2,q3,q4,theta,s2,s3,s4
 
-def CalcShearCenter(h,Ca,tsk,tsp,Iyy,Izz,stiff,Dx):
+def CalcShearCenter(h,Ca,tsk,tsp,Iyy,Izz,stiff,Dx,zbar):
     Sy = 1
     Sz = 0
    

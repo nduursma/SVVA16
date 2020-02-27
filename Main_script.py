@@ -7,6 +7,7 @@ from Cross_sectional_properties import cross_sect_prop
 from ShearCalcs import CalcTorsStif
 import matplotlib.pyplot as plt
 from Deflections import deflections
+from AllStressCalcs import CalcShearCenter
 
 
 # Input parameters
@@ -33,8 +34,9 @@ G     = 28E9        # [Pa]
 
 # Calculated parameters
 J     = CalcTorsStif(Ca,h,tsk,tsp)
-zsc = -0.085       # [m]
 Dx, zbar,ybar,Izz,Iyy, stiff = cross_sect_prop(h,tsk,tsp,tst,hst,wst,Ca,nst)
+#zsc = -0.085       # [m]
+zsc = CalcShearCenter(h,Ca,tsk,tsp,Iyy,Izz,stiff,Dx,zbar)
 
 
 # Reading the aerodynamic load
@@ -61,7 +63,7 @@ for k in range(1,Nx+1):
 
 
 # Interpolate the aerodynamic load
-xlst, zlst, qlst = patchinterpolate(600,600,xl,zl,data)
+xlst, zlst, qlst = patchinterpolate(1500,600,xl,zl,data)
 
 
 # Integrate the aerodynamic load
