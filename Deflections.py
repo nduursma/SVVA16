@@ -74,7 +74,7 @@ def deflections(x,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,d1lst,d
 
     # Slope in y direction
     def vs(x):
-        slope = locationvalue(xlst,x,d1lst)
+        slope = locationvalue(xlst,x,d1lst) + C1
         if x-x1>=0:
             slope += Ay/(2*EIzz)*(x-x1)**2
         if x-xf>=0:
@@ -104,7 +104,7 @@ def deflections(x,x1,x2,x3,xa,h,theta,P,E,G,zsc,Iyy,Izz,J,xlst,Vlst,Mlst,d1lst,d
 
     # Slope in z direction
     def ws(x):
-        slope = 0
+        slope = C3
         if x-x1>=0:
             slope += Az/(2*EIyy)*(x-x1)**2
         if x-xf>=0:

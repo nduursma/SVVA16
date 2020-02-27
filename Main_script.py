@@ -65,7 +65,7 @@ xlst, zlst, qlst = patchinterpolate(600,600,xl,zl,data)
 
 
 # Integrate the aerodynamic load
-Vlst, Mlst, d1lst, defllst, Tlst, thetalst = output(xlst, zlst, qlst, zsc)
+Vlst, Mlst, d1lst, defllst, taulst, Tlst, thetalst = output(xlst, zlst, qlst, zsc)
 
 # Calculate the reaction forces
 Ay,Az,By,Bz,Cy,Cz,Fy,Fz,C1,C2,C3,C4,C5 = reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,
@@ -167,7 +167,7 @@ plt.show()
 
 # x
 plt.subplot(221)
-plt.plot(x,z)
+plt.plot(x,twist)
 plt.title('Twist')
 plt.xlabel('x [m]')
 plt.ylabel('theta(x) [rad]')
@@ -181,7 +181,7 @@ plt.ylabel("T(x) [/m]")
 plt.grid()
 
 plt.subplot(223)
-plt.plot(x,thetalst)
+plt.plot(x,taulst)
 plt.title('Torque distribution')
 plt.xlabel('x [m]')
 plt.ylabel('tau(x) [Nm]')
