@@ -185,7 +185,7 @@ plt.subplot(222)
 plt.plot(x,torque)
 plt.title('Torque')
 plt.xlabel('x [m]')
-plt.ylabel("T(x) [/m]")
+plt.ylabel("T(x) [Nm]")
 plt.grid()
 
 plt.subplot(223)
