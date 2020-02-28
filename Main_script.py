@@ -73,7 +73,8 @@ Vlst, Mlst, d1lst, defllst, taulst, Tlst, thetalst = output(xlst, zlst, qlst, zs
 Ay,Az,By,Bz,Cy,Cz,Fy,Fz,C1,C2,C3,C4,C5 = reaction_forces(la,x1,x2,x3,xa,h,d1,d3,theta,P,E,G,zsc,Iyy,
                                                          Izz, J,xlst,Vlst,Mlst,defllst,Tlst,thetalst)
 
-# Creating the plots
+
+# Calculate displacements, moments, etc. for every x location
 x = xlst #np.arange(0,la+dx,dx)
 
 y = []
@@ -104,9 +105,12 @@ for xi in x:
     twist.append(thetax)
     torque.append(Tx)
 
+
+# Calculate the maximum stress and its location
 maximumstress,zloc,yloc,xloc = AileronFullStress(x,sheary,shearz,momenty,momentz,torque,Ca,h,la,tsp,tsk,Iyy,Izz,zbar,Dx,stiff)
 
-'''
+
+# Creating the plots
 # y
 plt.subplot(221)
 plt.plot(x,y)
@@ -191,26 +195,4 @@ plt.xlabel('x [m]')
 plt.ylabel('tau(x) [Nm]')
 plt.grid()
 
-plt.show()
-'''
-
-plt.plot(x,y)
-plt.title('Deflection in y direction')
-plt.xlabel('x [m]')
-plt.ylabel('v(x) [m]')
-plt.grid()
-plt.show()
-
-plt.plot(x,z)
-plt.title('Deflection in z direction')
-plt.xlabel('x [m]')
-plt.ylabel('w(x) [m]')
-plt.grid()
-plt.show()
-
-plt.plot(x,twist)
-plt.title('Twist')
-plt.xlabel('x [m]')
-plt.ylabel('theta(x) [rad]')
-plt.grid()
 plt.show()
